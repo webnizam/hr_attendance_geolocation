@@ -11,7 +11,10 @@
     "license": "AGPL-3",
     "author": "FDT",
     "website": "https://fdtech.ae",
-    "depends": ["hr_attendance", "hr"],
+    "depends": [
+        "hr_attendance",
+        "hr"
+    ],
     "data": [
         "views/assets.xml",
         "security/ir.model.access.csv",

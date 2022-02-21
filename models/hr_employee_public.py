@@ -13,4 +13,4 @@ class HrEmployee(models.Model):
     require_location = fields.Boolean(
         string="Require GPS for Attendance", default=False)
     geofence = fields.Many2one("hr.geofence", string="Geofence")
-    geofence_ids = fields.Many2many("hr.geofence", srting="Active Geofences")
+    geofence_ids = fields.Many2many("hr.geofence", string="Active Geofences")
