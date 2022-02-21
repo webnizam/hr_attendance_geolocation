@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="hr_employee_view_form_inherited" model="ir.ui.view">
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
             <field name="job_id" position="after">
-                <field name="require_location"/>
-                <field name="geofence"/>
+                <field name="require_location" />
+                <!-- <field name="geofence"/> -->
+                <field name="geofence_ids" widget="many2many_tags" />
             </field>
         </field>
     </record>
@@ -23,6 +24,6 @@
         </field>
     </record>
 
-    <menuitem id="hr_fence" name="Geofences" parent="hr.menu_human_resources_configuration" sequence="10" action="geofence_action"/>
+    <menuitem id="hr_fence" name="Geofences" parent="hr.menu_human_resources_configuration" sequence="10" action="geofence_action" />
 
 </odoo>

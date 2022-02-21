@@ -5,7 +5,7 @@ from odoo import models, _, exceptions, fields
 import logging
 from geopy.distance import geodesic
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class HrEmployee(models.Model):
@@ -14,31 +14,37 @@ class HrEmployee(models.Model):
     require_location = fields.Boolean(
         string="GPS Location is Mandatory ?", default=False)
     geofence = fields.Many2one("hr.geofence", "Geofence")
-
-    # 'You\ve to enable location in your browser. Please permit the location request when it prompts'
+    geofence_ids = fields.Many2many("hr.geofence", string="Active Geofences")
 
     def attendance_manual(self, next_action, entered_pin=False, location=False):
-        need_gps = self.env['hr.employee.public'].search(
+        need_gps = self.env['hr.employee'].search(
             [('user_id', '=', self.env.user.id)]).require_location
-        # need_gps = self.env.user.require_location
-        # need_gps = True
-        fence = self.env['hr.employee.public'].search(
-            [('user_id', '=', self.env.user.id)]).geofence
-        log.error('Need GPS-->', "Test", need_gps)
-        if location == [0, 0] and need_gps:
 
-            return {'warning': _(f"You\'ve to enable gps location in your browser. Please permit the gps location request when it prompts.")}
-            # raise exceptions.UserError(
-            #     _('You\'ve to enable location in your browser. Please permit the location request when it prompts.'))
-        if fence and need_gps and location != [0, 0]:
+        fences = self.env['hr.employee'].search(
+            [('user_id', '=', self.env.user.id)]).geofence_ids
+
+        logger.error(
+            '------------------------------------------------------------------')
+
+        if location == [0, 0] and need_gps:
+            return {'warning': _(f"You\'ve to enable gps location in your browser. Please permit the gps location request when it prompts, or do it manually from the appropriate settings.")}
+
+        if len(list(fences)) > 0 and need_gps and location != [0, 0]:
+            logger.error(f'Fences: {len(fences)} --- {len(list(fences))}')
             current_loc = (location[0], location[1])
-            fence_loc = (fence.latitude, fence.longitude)
-            if geodesic(current_loc, fence_loc).meters > fence.radius:
-                return {'warning': _(f"You're not inside the company premises, please try again when you reach company premise.")}
+            for fence in fences:
+                fence_loc = (fence.latitude, fence.longitude)
+                logger.error(
+                    f'Locations: {str(current_loc)} --- {str(fence_loc)}')
+                distance = geodesic(current_loc, fence_loc).meters
+                if distance > fence.radius:
+                    return {'warning': _(f"You're {round(distance/1000, 2)} kilometer/s away from your designated working area, please try again when you are at your working location.")}
 
         res = super(
             HrEmployee, self.with_context(attendance_location=location)
         ).attendance_manual(next_action, entered_pin)
+        logger.error(
+            '------------------------------------------------------------------')
         return res
 
     # def attendance_manual(self, next_action, entered_pin=False, location=False):
