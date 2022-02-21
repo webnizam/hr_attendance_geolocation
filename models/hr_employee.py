@@ -12,7 +12,7 @@ class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     require_location = fields.Boolean(
-        string="GPS Location is Mandatory ?", default=False)
+        string="Require GPS for Attendance", default=False)
     geofence = fields.Many2one("hr.geofence", "Geofence")
     geofence_ids = fields.Many2many("hr.geofence", string="Active Geofences")
 
@@ -29,16 +29,25 @@ class HrEmployee(models.Model):
         if location == [0, 0] and need_gps:
             return {'warning': _(f"You\'ve to enable gps location in your browser. Please permit the gps location request when it prompts, or do it manually from the appropriate settings.")}
 
-        if len(list(fences)) > 0 and need_gps and location != [0, 0]:
-            logger.error(f'Fences: {len(fences)} --- {len(list(fences))}')
+        if len(fences) > 0 and need_gps and location != [0, 0]:
             current_loc = (location[0], location[1])
+            away = True
             for fence in fences:
                 fence_loc = (fence.latitude, fence.longitude)
                 logger.error(
                     f'Locations: {str(current_loc)} --- {str(fence_loc)}')
+                # distances.append(
+                #     {
+                #         'distance': geodesic(current_loc, fence_loc).meters,
+                #         'location': fence.name
+                #     })
                 distance = geodesic(current_loc, fence_loc).meters
-                if distance > fence.radius:
-                    return {'warning': _(f"You're {round(distance/1000, 2)} kilometer/s away from your designated working area, please try again when you are at your working location.")}
+                logger.error(f'Location: {fence.name}, Distance: {distance}')
+                if distance < fence.radius:
+                    away = False
+            if away:
+                return {'warning': _(f"You're far from your designated working area, please try again when you are at your working location.")}
+                # return {'warning': _(f"You're {round(distance/1000, 2)} kilometer/s away from your designated working area, please try again when you are at your working location.")}
 
         res = super(
             HrEmployee, self.with_context(attendance_location=location)
