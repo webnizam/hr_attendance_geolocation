@@ -13,7 +13,7 @@
     "website": "https://fdtech.ae",
     "depends": [
         "hr_attendance",
-        "hr"
+        "hr",
     ],
     "data": [
         "views/assets.xml",
