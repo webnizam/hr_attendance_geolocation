@@ -4,6 +4,7 @@
 from odoo import models, _, exceptions, fields
 import logging
 from geopy.distance import geodesic
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class HrEmployee(models.Model):
                     {
                         "check_in_latitude": location[0],
                         "check_in_longitude": location[1],
-                        "check_in_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}"
+                        "check_in_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}",
                     }
                 )
             else:
@@ -79,7 +80,7 @@ class HrEmployee(models.Model):
                     {
                         "check_out_latitude": location[0],
                         "check_out_longitude": location[1],
-                        "check_out_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}"
+                        "check_out_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}",
                     }
                 )
         return res
