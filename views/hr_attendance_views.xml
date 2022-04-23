@@ -15,10 +15,10 @@
                         <field name="check_in_longitude" nolabel="1" />
                         <br />
                         <field name="check_in_url" widget="url" nolabel="1" />
-                        Other:
-                        <br />
+                        Ip Address:
                         <field name="check_in_ip" nolabel="1" />
                         <br />
+                        User Aegnt:
                         <field name="check_in_useragent" nolabel="1" />
                     </span>
                     <label for="check_out_latitude" string="Check-out Details" />
@@ -30,10 +30,10 @@
                         <field name="check_out_longitude" nolabel="1" />
                         <br />
                         <field name="check_out_url" widget="url" nolabel="1" />
-                        Other:
-                        <br />
+                        Ip Address:
                         <field name="check_out_ip" nolabel="1" />
                         <br />
+                        User Agent:
                         <field name="check_out_useragent" nolabel="1" />
                     </span>
                 </group>
