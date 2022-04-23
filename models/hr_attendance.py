@@ -21,3 +21,9 @@ class HrAttendance(models.Model):
     )
     check_in_url = fields.Char(string='Check in URL')
     check_out_url = fields.Char(string='Check out URL')
+
+    check_in_ip = fields.Char(string='Check in Ip')
+    check_out_ip = fields.Char(string='Check out Ip')
+
+    check_in_useragent = fields.Char(string='Check in Useragent')
+    check_out_useragent = fields.Char(string='Check out Useragent')

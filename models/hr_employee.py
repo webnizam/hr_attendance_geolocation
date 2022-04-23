@@ -3,6 +3,7 @@
 
 from odoo import models, _, exceptions, fields
 import logging
+from odoo.http import request
 from geopy.distance import geodesic
 import json
 
@@ -66,10 +67,14 @@ class HrEmployee(models.Model):
     def _attendance_action_change(self):
         res = super()._attendance_action_change()
         location = self.env.context.get("attendance_location", False)
+        ip_address = request.httprequest.environ['REMOTE_ADDR']
+        useragent = request.httprequest.environ['HTTP_USER_AGENT']
         if location:
             if self.attendance_state == "checked_in":
                 res.write(
                     {
+                        'check_in_ip': ip_address,
+                        'check_in_useragent': useragent,
                         "check_in_latitude": location[0],
                         "check_in_longitude": location[1],
                         "check_in_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}",
@@ -78,6 +83,8 @@ class HrEmployee(models.Model):
             else:
                 res.write(
                     {
+                        'check_out_ip': ip_address,
+                        'check_out_useragent': useragent,
                         "check_out_latitude": location[0],
                         "check_out_longitude": location[1],
                         "check_out_url": f"https://www.google.com/maps/search/?api=1&query={location[0]},{location[1]}",
