@@ -16,7 +16,9 @@
                         <br />
                         <field name="check_in_url" widget="url" nolabel="1" />
                         Other:
+                        <br />
                         <field name="check_in_ip" nolabel="1" />
+                        <br />
                         <field name="check_in_useragent" nolabel="1" />
                     </span>
                     <label for="check_out_latitude" string="Check-out Details" />
@@ -29,7 +31,9 @@
                         <br />
                         <field name="check_out_url" widget="url" nolabel="1" />
                         Other:
+                        <br />
                         <field name="check_out_ip" nolabel="1" />
+                        <br />
                         <field name="check_out_useragent" nolabel="1" />
                     </span>
                 </group>
